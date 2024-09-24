@@ -1,5 +1,5 @@
 <!-- 父组件引用示例：
-    <DatePicker :value.sync="propName" seperator="~" :inline="true" @dateChange="handleDateChange()"></DatePicker> -->
+    <DatePicker v-model="propName" seperator="~" :inline="true" @dateChange="handleDateChange()"></DatePicker> -->
 
 <template>
     <div id="myDatePicker" :class="inline ? 'inline-picker' : 'block-picker'">
@@ -11,7 +11,7 @@
         value-format="yyyy-MM-dd"
         ref="beginDate"
         :picker-options="pickerOptions"
-        @change="$emit('update:value',value);handleChange()"
+        @change="handleChange()"
         @focus="setDateInputEvent('myDatePicker',value)"
         style="margin-right: 10px;">
         </el-date-picker>
@@ -24,7 +24,7 @@
         value-format="yyyy-MM-dd"
         ref="endDate"
         :picker-options="pickerOptions"
-        @change="$emit('update:value',value);handleChange()"
+        @change="handleChange()"
         @focus="setDateInputEvent('myDatePicker',value)"
         style="margin-left: 10px;">
         </el-date-picker>
@@ -43,45 +43,45 @@
                     shortcuts: [{
                         text: "最近一周",
                         onClick(picker) {
-                            const end = new Date()
-                            const start = new Date()
-                            start.setTime(start.getTime() - 1000 * 3600 * 24 * 7)
-                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')])
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 1000 * 3600 * 24 * 7);
+                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')]);
                             picker.$emit('pick');
                         }
                     }, {
                         text: "最近1月",
                         onClick(picker) {
-                            const end = new Date()
-                            const start = new Date()
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')])
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')]);
                             picker.$emit('pick');
                         }
                     }, {
                         text: "最近3月",
                         onClick(picker) {
-                            const end = new Date()
-                            const start = new Date()
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')])
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')]);
                             picker.$emit('pick');
                         }
                     }, {
                         text: "最近1年",
                         onClick(picker) {
-                            const end = new Date()
-                            const start = new Date()
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 365)
-                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')])
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')]);
                             picker.$emit('pick');
                         }
                     }, {
                         text: "今年以来",
                         onClick(picker) {
-                            const end = new Date()
-                            const start = new Date(end.getFullYear(), 0, 1)
-                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')])
+                            const end = new Date();
+                            const start = new Date(end.getFullYear(), 0, 1);
+                            _this.$emit('update:value',[_this.formatDate(start,'yyyy-MM-dd'),_this.formatDate(end,'yyyy-MM-dd')]);
                             picker.$emit('pick');
                         }
                     }]
@@ -89,7 +89,6 @@
             }
         },
         props: {
-            // 绑定的参数名，在父组件中设置":value.sync='propName'"字段即可实现propName与子组件value的双向绑定
             value: Array, // 日期参数，格式为['beginDate','endDate']
             seperater: {  // 分隔符
                 type: String,
@@ -99,9 +98,13 @@
                 type: Boolean,
                 default: false
             }
-            // 还可以传入其他参数，根据是否在父组件添加.sync修饰符以及子组件传递update:propName事件消息决定是否为双向绑定
+            // 还可以传入其他参数
             // propName1: typeName
             // propName2: typeName
+        },
+        model: {
+            prop: 'value',
+            event: 'dateChange'
         },
         methods:{
             formatDate: function(date, format) {
@@ -156,8 +159,8 @@
                 return data;
 			},
             handleChange(){
-                this.$emit('dateChange'); // 改变日期后，返回一个dateChange事件消息
-            }
+                this.$emit('dateChange',this.value); // 改变日期后，返回一个dateChange事件消息,传递更改后的值
+            },
         }
     }
 </script>
