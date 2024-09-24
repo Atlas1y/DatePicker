@@ -9,7 +9,7 @@
         placeholder="开始日期"
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
-        ref="beginDate"
+        ref="beginDatePicker"
         :picker-options="pickerOptions"
         @change="$emit('update:value',value);handleChange()"
         @focus="setDateInputEvent('myDatePicker',value)"
@@ -22,7 +22,7 @@
         placeholder="结束日期"
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
-        ref="endDate"
+        ref="endDatePicker"
         :picker-options="pickerOptions"
         @change="$emit('update:value',value);handleChange()"
         @focus="setDateInputEvent('myDatePicker',value)"
@@ -139,11 +139,29 @@
                 throw new Error('Invalid date format');
             },
             setDateInputEvent: function(e,data){ // 手动输入日期的格式转化器实现
+                const beginDatePicker = this.$refs.beginDatePicker;
+                const endDatePicker = this.$refs.endDatePicker;
 				var _this = this;
                 var beginData = document.getElementById(e).getElementsByTagName("input")[0];
                 var endData = document.getElementById(e).getElementsByTagName("input")[1];
                 beginData.addEventListener("blur", inTapEvent);
+                beginData.addEventListener("keyup", inEnterEvent);
                 endData.addEventListener("blur", outTapEvent);
+                endData.addEventListener("keyup", outEnterEvent);
+                function inEnterEvent(event){
+                    if(event.key === 'Enter'){
+                    beginData.value = disposeData(beginData.value);
+                    Vue.set(data, 0, beginData.value);
+                    beginDatePicker.hidePicker();
+                    }
+                }
+                function outEnterEvent(event){
+                    if(event.key === 'Enter'){
+                    endData.value = disposeData(endData.value);
+                    Vue.set(data, 1, endData.value);
+                    endDatePicker.hidePicker();
+                    }
+                }
                 function inTapEvent() {
                     beginData.value = disposeData(beginData.value);
                     Vue.set(data, 0, beginData.value);
