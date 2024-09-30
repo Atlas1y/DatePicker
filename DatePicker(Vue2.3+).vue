@@ -141,9 +141,9 @@
             setDateInputEvent: function(e,data){ // 手动输入日期的格式转化器实现
                 const beginDatePicker = this.$refs.beginDatePicker;
                 const endDatePicker = this.$refs.endDatePicker;
-				var _this = this;
-                var beginData = document.getElementById(e).getElementsByTagName("input")[0];
-                var endData = document.getElementById(e).getElementsByTagName("input")[1];
+				const _this = this;
+                const beginData = document.getElementById(e).getElementsByTagName("input")[0];
+                const endData = document.getElementById(e).getElementsByTagName("input")[1];
                 beginData.addEventListener("blur", inTapEvent);
                 beginData.addEventListener("keyup", inEnterEvent);
                 endData.addEventListener("blur", outTapEvent);
